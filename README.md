@@ -48,7 +48,7 @@ The `eval` operator is especially useful when combined with the `dup` operator, 
 0 "dup println dup 1 +" 10 eval
 ```
 
-When writing long running `eval` statements, using quoted strings can get a little hard to navigate. In this case, parentheses can be used, which are effectively just multiline strings.
+When writing long-running `eval` statements, using quoted strings can get a little hard to navigate. In this case, parentheses can be used to split operations by line. These are functionally just multiline strings and can also be used exactly as such.
 ```python
 # prints and makes a stack of acending numbers 1 -> 9
 0 (
@@ -62,11 +62,11 @@ When writing long running `eval` statements, using quoted strings can get a litt
 ) 10 eval
 ```
 
-As a final example, here is, roughly, fizzbuzz implemented using the above features:
+As a final example, this is, *roughly*, fizzbuzz implemented using the above features:
 ```python
 ## fizzbuzz from 0 -> 15
 
-# Create a stack of numbers from 0 -> 15
+# Create a stack of numbers from 15 -> 0
 15 (dup 1 -) 15 eval
 
 (
@@ -79,7 +79,7 @@ As a final example, here is, roughly, fizzbuzz implemented using the above featu
     3 % 0 "fizz" "" ifeq print
     5 % 0 "buzz" "" ifeq println
 
-# loop 31 times
+# loop 16 times
 ) 16 eval
 ```
 
