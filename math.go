@@ -1,4 +1,5 @@
 package main
+import "fmt"
 import "errors"
 
 func runAdd(stack *Stack) {
@@ -6,40 +7,43 @@ func runAdd(stack *Stack) {
     switch a.Type() {
     case DynTypeInt:
         b := stack.Pop()
-        if b.Type() != DynTypeInt {
-            panic(errors.New("Cannot add int to non-int"))
+        switch b.Type() {
+        case DynTypeInt:
+            result := b.(*DynInt).value + a.(*DynInt).value
+            stack.Push(&DynInt {result})
+        case DynTypeFloat:
+            result := b.(*DynFloat).value + float64(a.(*DynInt).value)
+            stack.Push(&DynFloat {result})
+        case DynTypeString:
+            result := fmt.Sprintf("%d%s", b.(*DynInt).value, a.(*DynString).value)
+            stack.Push(&DynString {result})
         }
-        val, err := a.Int()
-        if err != nil {
-            panic(err)
-        }
-
-        result := b.(*DynInt).value + val
-        stack.Push(&DynInt {result})
     case DynTypeFloat:
         b := stack.Pop()
-        if b.Type() != DynTypeFloat {
-            panic(errors.New("Cannot add float to non-float"))
+        switch b.Type() {
+        case DynTypeInt:
+            result := b.(*DynFloat).value + float64(a.(*DynInt).value)
+            stack.Push(&DynFloat {result})
+        case DynTypeFloat:
+            result := b.(*DynFloat).value + a.(*DynFloat).value
+            stack.Push(&DynFloat {result})
+        case DynTypeString:
+            result := fmt.Sprintf("%f%s", b.(*DynFloat).value, a.(*DynString).value)
+            stack.Push(&DynString {result})
         }
-        val, err := a.Float()
-        if err != nil {
-            panic(err)
-        }
-
-        result := b.(*DynFloat).value + val
-        stack.Push(&DynFloat {result})
     case DynTypeString:
         b := stack.Pop()
-        if b.Type() != DynTypeString {
-            panic(errors.New("Cannot add string to non-string"))
+        switch b.Type() {
+        case DynTypeInt:
+            result := fmt.Sprintf("%s%d", b.(*DynString).value, a.(*DynInt).value)
+            stack.Push(&DynString {result})
+        case DynTypeFloat:
+            result := fmt.Sprintf("%s%f", b.(*DynString).value, a.(*DynFloat).value)
+            stack.Push(&DynString {result})
+        case DynTypeString:
+            result := b.(*DynString).value + a.(*DynString).value
+            stack.Push(&DynString {result})
         }
-        val, err := a.String()
-        if err != nil {
-            panic(err)
-        }
-
-        result := b.(*DynString).value + val
-        stack.Push(&DynString {result})
     }
 }
 
@@ -157,16 +161,21 @@ func runModulo(stack *Stack) {
     switch a.Type() {
     case DynTypeInt:
         b := stack.Pop()
-        if b.Type() != DynTypeInt {
-            panic(errors.New("Cannot modulo int by non-int"))
-        }
-        val, err := a.Int()
-        if err != nil {
-            panic(err)
+        switch b.Type() {
+        case DynTypeInt:
+            val, err := a.Int()
+            if err != nil {
+                panic(err)
+            }
+            
+            result := b.(*DynInt).value % val
+            stack.Push(&DynInt {result})
+        case DynTypeFloat:
+            panic(errors.New("Cannot modulo float by int"))
+        case DynTypeString:
+            panic(errors.New("Cannot modulo string by int"))
         }
 
-        result := b.(*DynInt).value % val
-        stack.Push(&DynInt {result})
     case DynTypeFloat:
         panic(errors.New("Cannot apply modulo to float"))
     case DynTypeString:

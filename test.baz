@@ -1,4 +1,11 @@
-"Hello," " Sailor!" + print
-400 20 + print
-3.4 3.5 + print
+"Hello," " Sailor!" + println
+400 20 + println
+3.4 3.5 + println
 
+## fizzbuzz from 0 -> 30 
+15 (dup 1 -) 15 eval
+(dup
+    dup print " " print
+    3 % 0 "fizz" "" ifeq print
+    5 % 0 "buzz" "" ifeq println
+) 16 eval
