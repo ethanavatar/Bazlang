@@ -7,7 +7,7 @@ This is a toy language written in Go. It is a pure concatenative stack-based lan
 Values are pushed onto the stack. Operators pop values off the stack and push the result.
 
 The `println` operation pops and prints the top value on the stack.
-```
+```python
 "Hello, Sailor!" println
 ```
 
